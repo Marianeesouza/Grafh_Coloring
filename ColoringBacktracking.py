@@ -3,10 +3,14 @@ import matplotlib.pyplot as plt
 
 def coloring_backtracking(G, num=None) -> dict:
     # Inicializa o dicionário de cores com indice -1
+    # O indice -1 indica que o nó ainda não foi colorido
     K = {v:-1 for v in G.nodes()}
 
+    # Se o número de cores for especificado, então
+    # cria uma lista de cores com o número de cores especificado
     if num is not None:
         colors = [x for x in range(num)]
+    # Se o número de cores não for especificado, então
     else:
         colors = [x for x in range(100)]
 
@@ -17,21 +21,32 @@ def coloring_backtracking(G, num=None) -> dict:
         return None
     
 def coloring_backtracking_util(G, K, colors, v):
-    # Se todos os vértices foram coloridos, então a solução foi encontrada
+    # v é o indice do vértice atual
+    # Se v for igual ao número de vértices, então
+    # todos os vértices foram coloridos
     if v == len(K):
         return True
     
     # Para cada cor disponível, verifica se é segura
     for c in colors:
         if ifSafe(v, c, G, K):
+            # Se a cor c for segura, então atribui a cor c ao vértice v
             K[v] = c
+            
+            # Chama a função recursivamente para o próximo vértice
             if coloring_backtracking_util(G, K, colors, v+1):
                 return True
+            
+            # Se a chamada recursiva não retornar True, então
+            # a cor c não é segura, então atribui -1 ao vértice v
             K[v] = -1
+
+    # Se nenhuma cor for segura, então retorna False
     return False
 
 def ifSafe(v, c, G, color):
-    # Verifica se a cor c é segura para o vértice v
+    # Verifica se a cor c é segura para o vértice v, ou seja,
+    # se a cor c não foi atribuída a nenhum vizinho de v
     for i in G.neighbors(v):
         if color[i] == c:
             return False

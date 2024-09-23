@@ -3,18 +3,23 @@ import matplotlib.pyplot as plt
 
 def coloring_griedy(G, num=None) -> dict:
     # Inicializa o dicionário de cores com indice -1 
-    # para mostrar que não foi colorido
+    # O indice -1 indica que o nó ainda não foi colorido
     K = {v:-1 for v in G.nodes()} 
     
-     
+    # Se o número de cores for especificado, então
+    # cria uma lista de cores com o número de cores especificado
     if num is not None:
         colors = [x for x in range(num)]
+    # Se o número de cores não for especificado, então
+    # cria uma lista de cores com 100 cores
     else:
         colors = [x for x in range(100)]
 
     for node in K:
         # Inicializa a lista de cores disponíveis
+        # o indice i da lista indica se a cor i está disponível
         available = [True]*len(colors)
+
         # Para cada vizinho do nó, se ele já foi colorido, então
         # a cor dele não está disponível
         for neighbor in G.neighbors(node):
@@ -27,10 +32,12 @@ def coloring_griedy(G, num=None) -> dict:
                 K[node] = color
                 break
 
-        # Se não houver nenhuma cor disponível, então não há solução
+        # Se não houver nenhuma cor disponível e o nó ainda não foi colorido
+        # então não existe solução de coloração
         if all([n == False in available for n in available]):
             if K[node] == -1:
                 return None
+    # Retorna o dicionário de cores com a solução de coloração
     return K
 
 
